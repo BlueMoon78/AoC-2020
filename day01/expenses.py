@@ -6,20 +6,28 @@ import numpy
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("inputfile",  help="Input file of integers")
+parser.add_argument("input",  help="Input file of integers")
 parser.add_argument("--target",   help="Target", type=int, default=2020)
-parser.add_argument("--entries",  help="Number of expenses to consider", type=int, default=2)
+
 args = parser.parse_args()
 
-# Slurp integers from file into array
 expenses = []
-with open( args.inputfile ) as f:
+with open( args.input ) as f:
   for line in f:
-    expenses.append(int(line))
+    expenses.append(int(line)) # Cvonvert to int[] from input file
 
-# Get all combinations in the set
-combis = combinations(expenses, args.entries)
+part1, part2 = 2, 3 # The number of cnumbers combined to make target
+
+# First lets check Part 1
+combis = combinations(expenses, part1)
 for c in combis:
   if sum(c) == args.target:
-    print( numpy.prod(c) )
+    print(f"The product for Part 1 is {numpy.prod(c)}")
+    break
+
+# Finaly lets check Part 2
+combis = combinations(expenses, part2)
+for c in combis:
+  if sum(c) == args.target:
+    print(f"The product for Part 2 is {numpy.prod(c)}")
     break
