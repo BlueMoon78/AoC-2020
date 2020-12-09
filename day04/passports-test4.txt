@@ -1,0 +1,7 @@
+byr:2018
+ecl:amb
+eyr:2039
+hcl:z
+hgt:69cm
+iyr:2023
+pid:568948965

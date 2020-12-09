@@ -1,0 +1,48 @@
+byr:
+  type: "year"
+  mandatory: True
+  length: 4
+  min: 1920
+  max: 2002
+iyr:
+  type: "year" 
+  mandatory: True
+  length: 4
+  min: 2010
+  max: 2020
+eyr:
+  type: "year" 
+  mandatory: True
+  length: 4
+  min: 2010
+  max: 2030
+hgt:
+  type: "length"
+  mandatory: True
+  cm_min: 150
+  cm_max: 193
+  in_min: 59
+  in_max: 76
+hcl:
+  type: "hex"
+  mandatory: True
+  length: 7
+  lead_char: "#"
+  valid_char: "0123456789abcdef"
+ecl:
+  type: "colour"
+  mandatory: True
+  amber: "amb"
+  blue: "blu"
+  brown: "brn"
+  grey: "gry"
+  green: "grn"
+  hazel: "hzl"
+  other: "oth"
+pid:
+  type: "number"
+  mandatory: True
+  length: 9
+  valid_char: "0123456789"
+cid:
+  mandatory: False
