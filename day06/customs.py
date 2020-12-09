@@ -24,7 +24,6 @@ def main():
                     p1 -= 1
                 
                 l = len(line.split())
-                c = Counter(line)
                 p2 += sum(v == l for _, v in c.items())
                 if c['\n'] == l:
                     p2 -= 1
