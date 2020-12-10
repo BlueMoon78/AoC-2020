@@ -5,6 +5,30 @@ import argparse
 import os
 from collections import *
 
+def executeInstructions(instructions):
+    """ Execute the instructions in correct sequential
+    order until complete or problem identified """
+    
+    instruct_counter, acc = 0, 0
+    executed = set()
+
+    while instruct_counter < len(instructions):
+        if instruct_counter in executed:
+            """ Completed before last instruction
+            exit and update instruction set again """
+            return None
+        
+        executed.add(instruct_counter)
+        i, v = instructions[instruct_counter]
+        if i == "acc":
+            acc += v
+            instruct_counter += 1
+        elif i == "jmp":
+            instruct_counter += v
+        else:
+            instruct_counter += 1
+    
+    return acc
 
 
 def main():
@@ -15,70 +39,42 @@ def main():
 
     try:
         with open(args.inputfile, 'r') as f:
-            lines = [line.strip() for line in f.readlines()]
-            instructions = []
-            for line in lines:
-                i, q = line.split()
-                instructions.append([i, int(q), False])
+            """ Change to aquiring instructions from the file
+            including, not injecting execution state """
+            instructions = [line.strip().split() for line in f.readlines() if line.strip()]
+            instructions = [(i, int(v)) for i, v in instructions]
 
     except OSError:
         print(f"{args.inputfile} is MISSING!")
     else:
-        position = 0
-        executed = False
-        p1 = 0
-
-        while not executed:
-            i, v, executed = instructions[position]
-            print(instructions[position])
-            if not executed:
-                instructions[position][2] = True
-                if i == "acc":
-                    p1 += v
-                    position += 1
-                elif i == "jmp":
-                    position += v
-                else:
-                    position += 1
-
-        print(f"Part 1 answer is {p1}")
-
-        # Reset the executted parameter to get P2 answer
-        for x in instructions:
-            x[2] = False
-
-        position, last_position = 0, 0
-        p2 = 0
-        change_made = False
-        while position < len(instructions):
-            i, v, executed = instructions[position]
-            if not executed:
-                # All is fine, continue
-                instructions[position][2] = True
-                last_position = position
-                if i == "acc":
-                    p2 += v
-                    position += 1
-                elif i == "jmp":
-                    position += v
-                else:
-                    position += 1
-            elif not change_made:
-                position = last_position
-                i, v, executed = instructions[position]
-                instructions[position][2] = False
-                if i == "jmp": 
-                    instructions[position][0] = "nop"
-                    change_made = True
-                elif i == "nop" :
-                    instructions[position][0] = "jmp"
-                    change_made = True
-
-                print(f"Change made in line {position + 1}: {instructions[position]}")
+        executed = set()
+        instruct_counter, p1 = 0, 0
+        print(instructions)
+        while instruct_counter not in executed:
+            i, v = instructions[instruct_counter]
+            print(f"{instruct_counter} is {instructions[instruct_counter]}")
+            previous = instruct_counter
+            print(f"{i}, {v}")
+            if i == "acc":
+                p1 += v
+                instruct_counter += 1
+            elif i == "jmp":
+                instruct_counter += v
             else:
-                print("Houston, we have a problem")
-                position = len(instructions)
+                instruct_counter += 1
+            executed.add(previous)
 
+        for i in range(len(instructions)):
+            if instructions[i][0] == "acc":
+                # Do nothing special
+                continue
+            new_instruction = "jmp" if instructions[i][0] == "nop" else "nop"
+            new_instructions = instructions[:i] + [(new_instruction, instructions[i][1])] + instructions[i+1:]
+            p2 = executeInstructions(new_instructions)
+            if p2 is not None:
+                break
+            
+        print(f"Part 1 answer is {p1}")
         print(f"Part 2 answer is {p2}")
 
 if __name__ == "__main__":
