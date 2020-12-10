@@ -9,7 +9,7 @@ from collections import *
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("inputfile",  help="Input file of bag combinations")
-    parser.add_argument("--bag",   help="Target", type=str, default="shiny gold")
+    parser.add_argument("--bag", "-b",   help="Type of bag being searched for, e.g. \"shiny gold\" (the default)", type=str, default="shiny gold")
 
     args = parser.parse_args()
 
